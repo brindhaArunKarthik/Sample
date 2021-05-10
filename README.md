@@ -4,7 +4,6 @@ deployed in https://employee-8024d.web.app
 ```
 Download code as ZIP from github
 ```
-
 ### Compiles and hot-reloads for development
 ```
 npm run serve
