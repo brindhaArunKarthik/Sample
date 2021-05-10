@@ -64,13 +64,38 @@
       small
       @filtered="onFiltered"
     >
-    
-    <template :slot="`HEAD_${ key1 }`" slot-scope="data">
+
+    <!-- <template :slot="`HEAD_${ key1 }`" slot-scope="data">
             <b-form-group>
        <input type="checkbox" class="form-control form-control-sm" @click="addup(data)" v-model="q1salcheck" />
    </b-form-group>
-    </template>
-      <template #cell(actions)="row">
+   
+    </template> -->
+    <template #head(q1sal)="data">
+        <span>{{ data.label}}</span>
+         <input type="checkbox" v-model="q1salcheck" />
+      </template>
+      <template #head(q2sal)="data">
+        <span>{{ data.label}}</span>
+         <input type="checkbox" v-model="q2salcheck" />
+      </template>
+      <template #head(q3sal)="data">
+        <span>{{ data.label}}</span>
+         <input type="checkbox" v-model="q3salcheck" />
+      </template>
+      <template #head(q4sal)="data">
+        <span>{{ data.label}}</span>
+         <input type="checkbox" v-model="q4salcheck" />
+      </template>
+      <template #cell(totsal)="data">
+        <!-- {{data}} -->
+        <span>{{ sumsal(data.item.q1sal,data.item.q2sal,data.item.q3sal,data.item.q4sal,"sal")}}</span>
+      </template>
+      <template #cell(totwh)="data">
+        <!-- {{data}} -->
+        <span>{{ sumsal(data.item.q1wh,data.item.q2wh,data.item.q3wh,data.item.q4wh,"wh")}}</span>
+      </template>
+       <template #cell(actions)="row">
         <b-button-toolbar>
       <b-button-group class="mr-1">
         <b-button @click="info(row.item, row.index, $event.target)">
@@ -101,9 +126,11 @@ import Mixedchart from './mixedchart.vue'
     extends: Bar,
     data() {
       return {
-        key1:"q1sal",
         q1salcheck:false,
-          totalRows: 1,
+        q2salcheck:false,
+        q3salcheck:false,
+        q4salcheck:false,
+        totalRows: 1,
         currentPage: 1,
         perPage: 5,
         pageOptions: [5, 10, 15, { value: 100, text: "Show a lot" }],
@@ -138,7 +165,7 @@ import Mixedchart from './mixedchart.vue'
             key: 'q1sal',
             label: 'Salary for Q1',
             sortable: false},
-            {
+            { 
             key: 'q2sal',
             label: 'Salary for Q2',
             sortable: false},
@@ -151,11 +178,11 @@ import Mixedchart from './mixedchart.vue'
             label: 'Salary for Q4',
             sortable: false},
             {
-            key: 'q4sal',
+            key: 'totsal',
             label: 'Total Quarterly Salary',
             sortable: false},
             {
-            key: 'q4wh',
+            key: 'totwh',
             label: 'Total working hours',
             sortable: false},
             { key: 'actions', label: 'Actions' }
@@ -172,8 +199,30 @@ import Mixedchart from './mixedchart.vue'
       this.totalRows = this.items.length
     },
      methods: {
-       addup(item){
-console.log(item);
+       sumsal(m,n,o,p,q){
+         if(q=="sal"){
+           var temp =0
+           if(!this.q1salcheck && !this.q1salcheck && !this.q1salcheck && !this.q1salcheck) {
+             temp= m+n+o+p;
+           } else {
+if(this.q1salcheck){
+temp=temp+m
+}
+if(this.q2salcheck){
+temp=temp+n
+}
+if(this.q3salcheck){
+temp=temp+o
+}
+if(this.q4salcheck){
+temp=temp+p
+}
+}
+return temp
+         }else {
+return m+n+o+p;
+         }
+
        },
       info(item, index, button) {
         this.infoModal.title = `Row index: ${index}`
