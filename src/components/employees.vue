@@ -2,7 +2,7 @@
 <b-container>
   <div>
     <b-row>
-      <b-col lg="6" class="my-1">
+      <b-col lg="7" class="my-1">
         <b-form-group>
                   <b-input-group size="sm">
             <b-form-input
@@ -18,27 +18,25 @@
           </b-input-group>
         </b-form-group>
       </b-col>
-      <b-col sm="5" md="6" class="my-1">
-        <b-form-group
-          label="Per page"
-          label-for="per-page-select"
-          label-cols-sm="6"
-          label-cols-md="4"
-          label-cols-lg="3"
-          label-align-sm="right"
-          label-size="sm"
-          class="mb-0"
-        >
+      <b-col sm="12" md="6" lg="2" class="my-1">
+        <b-form-group>
+          <b-row>
+            <b-col sm="5" md="6" lg="5" style="padding:0px">
+          Per Page
+            </b-col>
+            <b-col sm="3" md="3" lg="5" style="padding:0px">
           <b-form-select
             id="per-page-select"
             v-model="perPage"
             :options="pageOptions"
             size="sm"
           ></b-form-select>
+            </b-col>
+          </b-row>
         </b-form-group>
       </b-col>
 
-      <b-col sm="7" md="4" class="my-1">
+      <b-col sm="7" md="4" lg="3" class="my-1">
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
