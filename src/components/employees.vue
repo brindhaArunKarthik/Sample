@@ -64,6 +64,7 @@
       small
       @filtered="onFiltered"
     >
+    
     <template :slot="`HEAD_${ key1 }`" slot-scope="data">
             <b-form-group>
        <input type="checkbox" class="form-control form-control-sm" @click="addup(data)" v-model="q1salcheck" />
