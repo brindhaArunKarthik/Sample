@@ -285,23 +285,23 @@ import Mixedchart from './mixedchart.vue'
             sortable: false},
             {
             key: 'q1sal',
-            label: 'Salary for Q1',
+            label: 'Salary Q1',
             sortable: false},
             { 
             key: 'q2sal',
-            label: 'Salary for Q2',
+            label: 'Salary Q2',
             sortable: false},
             {
             key: 'q3sal',
-            label: 'Salary for Q3',
+            label: 'Salary Q3',
             sortable: false},
             {
             key: 'q4sal',
-            label: 'Salary for Q4',
+            label: 'Salary Q4',
             sortable: false},
             {
             key: 'totsal',
-            label: 'Total Quarterly Salary',
+            label: 'Total Salary',
             sortable: false},
             {
             key: 'totwh',
