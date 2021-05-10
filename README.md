@@ -2,7 +2,7 @@
 
 ## Project setup
 ```
-npm install
+Download code as ZIP from github
 ```
 
 ### Compiles and hot-reloads for development
