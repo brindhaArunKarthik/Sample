@@ -101,7 +101,7 @@
         <b-button @click="info(row.item, row.index, $event.target)">
           <b-icon icon="eye" aria-hidden="true"></b-icon>
         </b-button>
-        <b-button>
+        <b-button @click="editmodal(row.item, row.index, $event.target)">
           <b-icon icon="pencil" aria-hidden="true"></b-icon>
         </b-button>
         <b-button @click="removedata(row.index)">
@@ -112,8 +112,119 @@
       </template>
       </b-table>
   </div>
-  <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-      <pre>{{ infoModal.content }}</pre>
+
+  <b-modal :id="'edit'+infoModal.id" :title="infoModal.title" ok-only @show="seteditdata(JSON.parse(infoModal.content))" @ok="editinfo(JSON.parse(infoModal.content))">
+    <b-container fluid>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Name:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoname" placeholder="Enter new name"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Job Title:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infotitle" placeholder="Enter new Job Title"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Country:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infocountry" placeholder="Enter new country"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q1 Salary:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq1sal" placeholder="Enter Q1 salary"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q2 Salary:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq2sal" placeholder="Enter Q2 salary"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q3 Salary:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq3sal" placeholder="Enter Q3 salary"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q4 Salary:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq4sal" placeholder="Enter Q4 salary"></b-form-input>
+      </b-col>
+    </b-row>
+      <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q1 Working Hours:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq1wh" placeholder="Enter Q1 Working Hours"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q2 Working Hours:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq2wh" placeholder="Enter Q2 Working Hours"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q3 Working Hours:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq3wh" placeholder="Enter Q3 Working Hours"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Q4 Working Hours:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoq4wh" placeholder="Enter Q4 Working Hour"></b-form-input>
+      </b-col>
+    </b-row>
+  </b-container>
+  </b-modal>
+  
+  <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @show="setdata(JSON.parse(infoModal.content))" @hide="resetInfoModal()" @ok="updateinfo(JSON.parse(infoModal.content))">
+            <b-container fluid>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Name:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infoname" placeholder="Enter new name"></b-form-input>
+      </b-col>
+    </b-row>
+    <b-row class="my-1">
+      <b-col sm="3">
+        <label>Job Title:</label>
+      </b-col>
+      <b-col sm="9">
+        <b-form-input v-model="infotitle" placeholder="Enter new Job Title"></b-form-input>
+      </b-col>
+    </b-row>
+  </b-container>
       <Mixedchart v-bind:content="infoModal.content"></Mixedchart>
     </b-modal>
   </b-container>
@@ -126,6 +237,17 @@ import Mixedchart from './mixedchart.vue'
     extends: Bar,
     data() {
       return {
+        infotitle:"",
+        infoname:"",
+        infocountry:"",
+        infoq1sal:"",
+        infoq2sal:"",
+        infoq3sal:"",
+        infoq4sal:"",
+        infoq1wh:"",
+        infoq2wh:"",
+        infoq3wh:"",
+        infoq4wh:"",
         q1salcheck:false,
         q2salcheck:false,
         q3salcheck:false,
@@ -229,14 +351,76 @@ return m+n+o+p;
         this.infoModal.content = JSON.stringify(item, null, 2)
         this.$root.$emit('bv::show::modal', this.infoModal.id, button)
       },
+      editmodal(item, index, button) {
+
+        this.infoModal.title = `Row index: ${index}`
+        this.infoModal.content = JSON.stringify(item, null, 2)
+        this.$root.$emit('bv::show::modal', 'edit'+this.infoModal.id, button)
+        //this.$bvModal.show(id)
+      },
       removedata(index) {
-        alert("index = "+index);
         this.items.splice(index,1);
         this.$parent.maindata=this.items
       },
-      resetInfoModal() {
+      updateinfo(id) {
         this.infoModal.title = ''
         this.infoModal.content = ''
+        this.items[id.id-1].name= this.infoname
+        this.items[id.id-1].jobtitle= this.infotitle
+        this.$parent.maindata=this.items
+        this.infoname="";
+this.infotitle="";
+      },
+      resetInfoModal() {
+         this.infoModal.title = ''
+         this.infoModal.content = ''
+         this.infoname="";
+this.infotitle="";
+      },
+      editinfo(id) {
+        this.infoModal.title = ''
+        this.infoModal.content = ''
+        this.items[id.id-1].name= this.infoname
+        this.items[id.id-1].jobtitle= this.infotitle
+        this.items[id.id-1].country= this.infoountry
+        this.items[id.id-1].q1sal= this.infoq1sal
+        this.items[id.id-1].q2sal= this.infoq2sal
+        this.items[id.id-1].q3sal= this.infoq3sal
+        this.items[id.id-1].q4sal= this.infoq4sal
+        this.items[id.id-1].q1wh= this.infoq1wh
+        this.items[id.id-1].q2wh= this.infoq2wh
+        this.items[id.id-1].q3wh= this.infoq3wh
+        this.items[id.id-1].q4wh= this.infoq4wh
+        this.$parent.maindata=this.items
+    this.infotitle="";
+        this.infoname="";
+        this.infocountry="";
+        this.infoq1sal="";
+        this.infoq2sal="";
+        this.infoq3sal="";
+        this.infoq4sal="";
+        this.infoq1wh="";
+        this.infoq2wh="";
+        this.infoq3wh="";
+        this.infoq4wh="";
+      },
+  
+      setdata(infodata){
+this.infoname=infodata.name;
+this.infotitle=infodata.jobtitle;
+      },
+      seteditdata(infodata){
+this.infoname=infodata.name;
+this.infotitle=infodata.jobtitle;
+this.infocountry=infodata.country;
+this.infoq1sal=infodata.q1sal;
+this.infoq2sal=infodata.q2sal;
+this.infoq3sal=infodata.q3sal;
+this.infoq4sal=infodata.q4sal;
+this.infoq1wh=infodata.q1wh;
+this.infoq2wh=infodata.q2wh;
+this.infoq3wh=infodata.q3wh;
+this.infoq4wh=infodata.q4wh;
       },
       onFiltered(filteredItems) {
         // Trigger pagination to update the number of pages due to filtering
