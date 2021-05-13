@@ -2,7 +2,7 @@
 <b-container>
   <div>
     <b-row>
-      <b-col lg="7" class="my-1">
+      <b-col lg="6" class="my-1">
         <b-form-group>
                   <b-input-group size="sm">
             <b-form-input
@@ -36,7 +36,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col sm="7" md="4" lg="3" class="my-1">
+      <b-col sm="7" md="4" lg="4" class="my-1">
         <b-pagination
           v-model="currentPage"
           :total-rows="totalRows"
@@ -47,6 +47,21 @@
         ></b-pagination>
       </b-col>
     </b-row>
+    <div v-if="items.length==0">
+    <div class="text-center mb-3 d-flex justify-content-between">
+      <b-spinner
+        variant="success"
+        key="variant"
+      ></b-spinner>
+    </div> 
+     <div class="text-center d-flex justify-content-between">
+      <b-spinner
+        variant="success"
+        key="success"
+        type="grow"
+      ></b-spinner>
+    </div>
+    </div>
         <b-table
       :items="items"
       :fields="fields"
@@ -229,6 +244,8 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+import "firebase/firestore";
 import { Bar } from 'vue-chartjs'
 import Mixedchart from './mixedchart.vue'
   export default {
@@ -315,8 +332,17 @@ import Mixedchart from './mixedchart.vue'
         Mixedchart
     },
     created(){
-      this.items = this.$parent.maindata
-      this.totalRows = this.items.length
+      console.log("from emp created");
+      var db = firebase.firestore();
+      db.collection("Sample").doc("empdoc")
+    .onSnapshot((doc) => {
+       var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+       console.log(source, " data: ", doc.data());
+        this.items = doc.data().employee;
+     this.totalRows = this.items.length
+     });
+      //this.items = firebase.firestore().collection('samples').doc("empdoc").get();
+     
     },
      methods: {
        sumsal(m,n,o,p,q){
@@ -358,16 +384,22 @@ return m+n+o+p;
       },
       removedata(index) {
         this.items.splice(index,1);
-        this.$parent.maindata=this.items
+      this.updatefirestore();
       },
       updateinfo(id) {
         this.infoModal.title = ''
         this.infoModal.content = ''
         this.items[id.id-1].name= this.infoname
         this.items[id.id-1].jobtitle= this.infotitle
-        this.$parent.maindata=this.items
+        this.updatefirestore();
         this.infoname="";
 this.infotitle="";
+      },
+    updatefirestore() {
+    var db = firebase.firestore();
+    db.collection("Sample").doc("empdoc").update({
+    employee: this.items
+    })
       },
       resetInfoModal() {
          this.infoModal.title = ''
@@ -389,7 +421,7 @@ this.infotitle="";
         this.items[id.id-1].q2wh= this.infoq2wh
         this.items[id.id-1].q3wh= this.infoq3wh
         this.items[id.id-1].q4wh= this.infoq4wh
-        this.$parent.maindata=this.items
+        this.updatefirestore();
     this.infotitle="";
         this.infoname="";
         this.infocountry="";

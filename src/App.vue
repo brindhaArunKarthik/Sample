@@ -6,6 +6,8 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+import "firebase/firestore";
 export default {
   name: 'App',
    data() {
@@ -16,8 +18,16 @@ export default {
    methods:{
     randomdata(){
       this.empty=false
-          
-      for(var i=0;i<1000;i++){
+                var db = firebase.firestore();
+      db.collection("Sample").doc("empdoc")
+    .onSnapshot((doc) => {
+      console.log("Current data: ", doc.data());
+       var source = doc.metadata.hasPendingWrites ? "Local" : "Server";
+       console.log(source, " data: ", doc.data());
+        this.maindata = doc.data().employee;
+    });
+    if(this.maindata.length==0) {
+for(var i=0;i<100000;i++){
                var temp = new Object();
           temp["id"]= i+1,
           temp["jobtitle"]=this.$faker().name.jobTitle();
@@ -34,8 +44,19 @@ export default {
           temp["q4wh"]=this.$faker().finance.amount()          
 this.maindata.push(temp)     
       }
-      this.$router.push('/employees');
-  }
+    db.collection("Sample").doc("empdoc").set({
+    employee: this.maindata
+    }).then(
+    this.$router.push('/employees')
+)
+.catch((error) => {
+    console.error("Error adding document: ", error);
+});
+}
+else{
+  this.$router.push('/employees')
+}          
+}
 }
 }
 </script>

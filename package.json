@@ -12,6 +12,7 @@
     "bootstrap-vue": "^2.21.2",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
+    "firebase": "^8.6.1",
     "vue": "^2.6.12",
     "vue-chartjs": "^3.5.1",
     "vue-faker": "^3.0.0",
@@ -44,5 +45,17 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "description": "deployed in https://employee-8024d.web.app ## Project setup ``` Download code as ZIP from github ``` ### Compiles and hot-reloads for development ``` npm run serve ```",
+  "main": "babel.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brindhaArunKarthik/Sample.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brindhaArunKarthik/Sample/issues"
+  },
+  "homepage": "https://github.com/brindhaArunKarthik/Sample#readme"
 }
