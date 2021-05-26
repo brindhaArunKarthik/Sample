@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <b-button v-show="empty" @click="randomdata()">Randomize Data</b-button>
+      <b-button v-show="maindata.length==0" @click="randomdata()">Randomize Data</b-button>
 <router-view></router-view>
  </div>
 </template>
